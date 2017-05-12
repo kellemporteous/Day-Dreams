@@ -5,9 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public float speed;
+    public AudioClip footStep;
 
     private Rigidbody sonRB;
     private Rigidbody motherRB;
+
+    public float audioTimer;
 
     public enum MotherState
     {
@@ -37,6 +40,15 @@ public class PlayerController : MonoBehaviour {
     {
         AILogic();
         AIBehaviour();
+
+        if (audioTimer > 0)
+        {
+            audioTimer -= Time.deltaTime;
+        }
+        if (audioTimer < 0)
+        {
+            audioTimer = 0;
+        }
     }
 
     void AILogic()
@@ -78,7 +90,7 @@ public class PlayerController : MonoBehaviour {
 
     void Movement()
     {
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.D))
         {
             if (CameraController.Instance.sonOn == true)
             {
@@ -88,8 +100,14 @@ public class PlayerController : MonoBehaviour {
             {
                 motherRB.AddForce(Vector3.right * speed * Time.deltaTime);
             }
+
+            if (audioTimer == 0)
+            {
+                SoundConroller.soundController.PlaySound(footStep);
+                audioTimer = 0.9f;
+            }
         }
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.A))
         {
             if (CameraController.Instance.sonOn == true)
             {
@@ -99,8 +117,14 @@ public class PlayerController : MonoBehaviour {
             {
                 motherRB.AddForce(Vector3.left * speed * Time.deltaTime);
             }
+
+            if (audioTimer == 0)
+            {
+                SoundConroller.soundController.PlaySound(footStep);
+                audioTimer = 0.9f;
+            }
         }
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.W))
         {
             if (CameraController.Instance.sonOn == true)
             {
@@ -110,8 +134,14 @@ public class PlayerController : MonoBehaviour {
             {
                 motherRB.AddForce(Vector3.forward * speed * Time.deltaTime);
             }
+
+            if (audioTimer == 0)
+            {
+                SoundConroller.soundController.PlaySound(footStep);
+                audioTimer = 0.9f;
+            }
         }
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.S))
         {
             if (CameraController.Instance.sonOn == true)
             {
@@ -120,6 +150,12 @@ public class PlayerController : MonoBehaviour {
             else if (CameraController.Instance.motherOn == true)
             {
                 motherRB.AddForce(Vector3.back * speed * Time.deltaTime);
+            }
+
+            if (audioTimer == 0)
+            {
+                SoundConroller.soundController.PlaySound(footStep);
+                audioTimer = 0.9f;
             }
         }
     }
