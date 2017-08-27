@@ -4,13 +4,25 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-    public float speed;
-    public AudioClip footStep;
+    /*
 
     private Rigidbody sonRB;
     private Rigidbody motherRB;
 
     public float audioTimer;
+    */
+    public float speed;
+    public AudioClip footStep;
+
+    public GameObject son;
+    public GameObject mother;
+    public GameObject activePlayer;
+    public GameObject deactivePlayer;
+
+    public float audioTimer;
+
+    private Transform myTransform;
+
 
     public enum MotherState
     {
@@ -27,11 +39,19 @@ public class PlayerController : MonoBehaviour {
     public MotherState motherState;
     public SonState sonState;
 
+
+    
 	// Use this for initialization
 	void Start ()
     {
-        sonRB = GameObject.FindGameObjectWithTag("Son").GetComponent<Rigidbody>();
-        motherRB = GameObject.FindGameObjectWithTag("Mother").GetComponent<Rigidbody>();
+        /*sonRB = GameObject.FindGameObjectWithTag("Son").GetComponent<Rigidbody>();
+        motherRB = GameObject.FindGameObjectWithTag("Mother").GetComponent<Rigidbody>();*/
+
+
+
+        son = GameObject.FindGameObjectWithTag("Son");
+        mother = GameObject.FindGameObjectWithTag("Mother");
+        activePlayer = this.gameObject;
 
     }
 
@@ -58,10 +78,22 @@ public class PlayerController : MonoBehaviour {
             sonState = SonState.sonActive;
             motherState = MotherState.motherIdle;
         }
-        if (CameraController.Instance.motherOn == true)
+        else if (CameraController.Instance.motherOn == true)
         {
             sonState = SonState.sonIdle;
             motherState = MotherState.motherActive;
+        }
+
+        if (sonState == SonState.sonActive)
+        {
+            activePlayer = son;
+            deactivePlayer = mother;
+        }
+
+        else if (motherState == MotherState.motherActive)
+        {
+            activePlayer = mother;
+            deactivePlayer = son;
         }
     }
 
@@ -92,14 +124,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (Input.GetKey(KeyCode.D))
         {
-            if (CameraController.Instance.sonOn == true)
-            {
-                sonRB.AddForce(Vector3.right * speed * Time.deltaTime);
-            }
-            else if (CameraController.Instance.motherOn == true)
-            {
-                motherRB.AddForce(Vector3.right * speed * Time.deltaTime);
-            }
+            activePlayer.transform.position = new Vector3(activePlayer.transform.position.x + speed * Time.deltaTime, activePlayer.transform.position.y, activePlayer.transform.position.z);
 
             if (audioTimer == 0)
             {
@@ -109,14 +134,7 @@ public class PlayerController : MonoBehaviour {
         }
         if (Input.GetKey(KeyCode.A))
         {
-            if (CameraController.Instance.sonOn == true)
-            {
-                sonRB.AddForce(Vector3.left * speed * Time.deltaTime);
-            }
-            else if (CameraController.Instance.motherOn == true)
-            {
-                motherRB.AddForce(Vector3.left * speed * Time.deltaTime);
-            }
+            activePlayer.transform.position = new Vector3(activePlayer.transform.position.x - speed * Time.deltaTime, activePlayer.transform.position.y, activePlayer.transform.position.z);
 
             if (audioTimer == 0)
             {
@@ -126,14 +144,7 @@ public class PlayerController : MonoBehaviour {
         }
         if (Input.GetKey(KeyCode.W))
         {
-            if (CameraController.Instance.sonOn == true)
-            {
-                sonRB.AddForce(Vector3.forward * speed * Time.deltaTime);
-            }
-            else if (CameraController.Instance.motherOn == true)
-            {
-                motherRB.AddForce(Vector3.forward * speed * Time.deltaTime);
-            }
+            activePlayer.transform.position = new Vector3(activePlayer.transform.position.x, activePlayer.transform.position.y, activePlayer.transform.position.z + speed * Time.deltaTime);
 
             if (audioTimer == 0)
             {
@@ -143,14 +154,7 @@ public class PlayerController : MonoBehaviour {
         }
         if (Input.GetKey(KeyCode.S))
         {
-            if (CameraController.Instance.sonOn == true)
-            {
-                sonRB.AddForce(Vector3.back * speed * Time.deltaTime);
-            }
-            else if (CameraController.Instance.motherOn == true)
-            {
-                motherRB.AddForce(Vector3.back * speed * Time.deltaTime);
-            }
+            activePlayer.transform.position = new Vector3(activePlayer.transform.position.x, activePlayer.transform.position.y, activePlayer.transform.position.z - speed * Time.deltaTime);
 
             if (audioTimer == 0)
             {
@@ -162,7 +166,7 @@ public class PlayerController : MonoBehaviour {
 
     void Idle()
     {
-        if (CameraController.Instance.sonOn == true)
+        /*if (CameraController.Instance.sonOn == true)
         {
             motherRB.isKinematic = true;
             sonRB.isKinematic = false;
@@ -171,6 +175,6 @@ public class PlayerController : MonoBehaviour {
         {
             sonRB.isKinematic = true;
             motherRB.isKinematic = false;
-        }
+        }*/
     }
 }
